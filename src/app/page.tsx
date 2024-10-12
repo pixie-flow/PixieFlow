@@ -3,6 +3,9 @@ import { useEffect, useRef } from 'react';
 import './styles/global.css';
 import vertexShader from './shaders/vertex.wgsl'
 import fragmentShader from './shaders/fragment.wgsl'
+import Draggable from 'react-draggable';
+import React from 'react';
+
 
 const Home = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -151,7 +154,9 @@ const Home = () => {
 
         {/* ボックスがある部分 */}
         <div className="box-container">
-          <div className="box" />
+          <Draggable>
+            <div className="box"/>
+          </Draggable>
         </div>
       </div>
     </div>
