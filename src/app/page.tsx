@@ -1,14 +1,15 @@
 "use client";
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './styles/global.css';
-import vertexShader from './shaders/vertex.wgsl'
-import fragmentShader from './shaders/fragment.wgsl'
-import Draggable from 'react-draggable';
-import React from 'react';
-
+import { NodeBox } from '../components/NodeBox';
+import { ConnectionLines } from '../components/ConnectionLines';
+import { useNodeSystem } from '../hooks/useNodeSystem';
+import vertexShader from './shaders/vertex.wgsl';
+import fragmentShader from './shaders/fragment.wgsl';
 
 const Home = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef(null);
+  const nodeSystem = useNodeSystem();
 
   useEffect(() => {
     const initializeWebGPU = async () => {
@@ -136,27 +137,63 @@ const Home = () => {
 
   return (
     <div className="container">
-      {/* ヘッダー部分 */}
       <header className="header">
-        <div className="left">component</div>
+        <div className="left">Component Editor</div>
         <div className="right">
-          <span>save</span>
-          <span>publish</span>
+          <button 
+            onClick={() => {
+              const id = `node-${Object.keys(nodeSystem.nodes).length}`;
+              nodeSystem.addNode(id, {
+                x: Math.random() * 300,
+                y: Math.random() * 200
+              });
+            }} 
+            className="button primary"
+          >
+            Add Node
+          </button>
+          <button className="button">Save</button>
+          <button className="button">Publish</button>
         </div>
       </header>
 
-      {/* メインコンテンツ */}
       <div className="content">
-        {/* Canvas 部分 */}
-        <div className="canvas-container">
-          <canvas ref={canvasRef} width={300} height={400} />
-        </div>
+        <div 
+          className="canvas-container">
+          <canvas ref={canvasRef} className="webgpu-canvas" />
+          </div>
 
-        {/* ボックスがある部分 */}
-        <div className="box-container">
-          <Draggable>
-            <div className="box"/>
-          </Draggable>
+        <div className="properties-panel">
+          <h2 className="properties-title">Properties</h2>
+          <div className="node-system-container" 
+              onMouseMove={nodeSystem.updateDraggingConnection}
+              onMouseUp={nodeSystem.clearDraggingConnection}>
+            <ConnectionLines 
+              nodes={nodeSystem.nodes}
+              draggingConnection={nodeSystem.draggingConnection}
+            />
+            {Object.entries(nodeSystem.nodes).map(([id, node]) => (
+              <NodeBox
+                key={id}
+                id={id}
+                node={node}
+                position={node.position}
+                onDrag={nodeSystem.updateNodePosition}
+                onStartConnection={nodeSystem.startConnection}
+                onEndConnection={nodeSystem.endConnection}
+              />
+            ))}
+          </div>
+          <div className="properties-list">
+            {Object.entries(nodeSystem.nodes).map(([id, node]) => (
+              <div key={id} className="property-item">
+                <h3 className="property-name">Node {id}</h3>
+                <div className="property-value">
+                  x: {Math.round(node.position.x)}, y: {Math.round(node.position.y)}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
