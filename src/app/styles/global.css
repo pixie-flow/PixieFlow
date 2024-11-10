@@ -1,4 +1,3 @@
-/* 全体のレイアウト */
 .container {
   height: 100vh;
   display: flex;
@@ -6,7 +5,6 @@
   font-family: Arial, sans-serif;
 }
 
-/* ヘッダー */
 .header {
   display: flex;
   justify-content: space-between;
@@ -24,31 +22,151 @@
   gap: 20px;
 }
 
-/* コンテンツ領域 */
 .content {
   display: flex;
   flex: 1;
 }
 
-/* Canvasのスタイル */
 .canvas-container {
   width: 30%;
-  background-color: #333; /* Canvasの背景色 */
+  background-color: #333;
+  position: relative;
+  overflow: hidden;
 }
 
-/* 右側のボックス */
-.box-container {
+.webgpu-canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.button:hover {
+  background-color: #f0f0f0;
+}
+
+.button.primary {
+  background-color: #4caf93;
+  color: white;
+  border: none;
+}
+
+.button.primary:hover {
+  background-color: #3d8b74;
+}
+
+.node-system-container {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  background-color: #333;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.connection-svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+  width: 100%;
+  height: 100%;
+}
+
+.node-box {
+  position: absolute;
+  width: 160px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  padding: 12px;
+  cursor: move;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.node-connector {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 11;
+}
+
+.node-connector.input {
+  left: -6px;
+  background-color: #3b82f6;
+}
+
+.node-connector.output {
+  right: -6px;
+  background-color: #10b981;
+}
+
+.node-connector:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgb(0 0 0 / 30%);
+}
+
+.connection-path {
+  stroke: #4caf93;
+  stroke-width: 2;
+  fill: none;
+  transition: none;
+}
+
+.connection-path:hover {
+  stroke: #2a8059;
+  stroke-width: 3;
+}
+
+.connection-path.dragging {
+  stroke: #666;
+  stroke-dasharray: 5,5;
+}
+
+.properties-panel {
   width: 70%;
   background-color: #f5f5f5;
+  padding: 16px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  position: relative;
 }
 
-.box {
-  width: 150px;
-  height: 100px;
-  background-color: #4caf93;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+.properties-list {
+  margin-top: 16px;
+  overflow-y: auto;
+}
+
+.property-item {
+  background-color: white;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.property-name {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.property-value {
+  font-size: 14px;
+  color: #666;
 }
