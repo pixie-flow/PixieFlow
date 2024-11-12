@@ -1,3 +1,5 @@
+export type ComponentType = 'geometry' | 'texture' | 'composite' | 'interaction';
+
 export interface NodePort {
   id: string;
   y: number;
@@ -9,6 +11,8 @@ export interface Node {
   position: { x: number; y: number };
   input: NodePort;
   output: NodePort;
+  componentType: ComponentType;
+  componentNumber: number;
 }
 
 export interface DraggingConnection {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Node, DraggingConnection } from '../types/node';
+import type { Node, DraggingConnection, ComponentType } from '../types/node';
 
 export const useNodeSystem = () => {
   const [nodes, setNodes] = useState<Record<string, Node>>({});
@@ -10,25 +10,42 @@ export const useNodeSystem = () => {
     x: number;
     y: number;
   } | null>(null);
+  const [componentCounters, setComponentCounters] = useState<Record<ComponentType, number>>({
+    geometry: 0,
+    texture: 0,
+    composite: 0,
+    interaction: 0
+  });
 
-  const addNode = (id: string, position: { x: number; y: number }) => {
-    setNodes(prev => ({
-      ...prev,
-      [id]: {
-        id,
-        position,
-        input: {
-          id: `${id}-in`,
-          y: 30,
-          connections: []
-        },
-        output: {
-          id: `${id}-out`,
-          y: 30,
-          connections: []
+  const addNode = (id: string, options: { x: number; y: number; componentType: ComponentType }) => {
+    setNodes(prev => {
+      const currentCount = componentCounters[options.componentType];
+      
+      setComponentCounters(prevCounters => ({
+        ...prevCounters,
+        [options.componentType]: currentCount + 1
+      }));
+
+      return {
+        ...prev,
+        [id]: {
+          id,
+          position: { x: options.x, y: options.y },
+          componentType: options.componentType,
+          componentNumber: currentCount + 1,
+          input: {
+            id: `${id}-in`,
+            y: 30,
+            connections: []
+          },
+          output: {
+            id: `${id}-out`,
+            y: 30,
+            connections: []
+          }
         }
-      }
-    }));
+      };
+    });
   };
 
   const updateNodePosition = (id: string, position: { x: number; y: number }) => {
