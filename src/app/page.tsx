@@ -1,15 +1,17 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './styles/global.css';
 import { NodeBox } from '../components/NodeBox';
 import { ConnectionLines } from '../components/ConnectionLines';
 import { useNodeSystem } from '../hooks/useNodeSystem';
 import vertexShader from './shaders/vertex.wgsl';
 import fragmentShader from './shaders/fragment.wgsl';
+import { ComponentSelector } from '../components/ComponentSelector';
 
 const Home = () => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodeSystem = useNodeSystem();
+  const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 
   useEffect(() => {
     const initializeWebGPU = async () => {
@@ -98,7 +100,7 @@ const Home = () => {
           colorAttachments: [
             {
               view: textureView,
-              // 背景を指定
+              // 背景を定
               clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
               // ロード操作を指定
               // 'load': 前のフレームからの描画結果が維持
@@ -116,7 +118,7 @@ const Home = () => {
         // GPUコマンドの記録開始
         const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor)
         // レンダーパイプラインを設定
-        // これにより、使用するシェーダーとレンダリング設定が指定される
+        // これによ、使用するシェーダーとレンダリング設定が指定される
         passEncoder.setPipeline(pipeline)
         // レンダリング開始
         passEncoder.draw(3)
@@ -141,13 +143,7 @@ const Home = () => {
         <div className="left">Component Editor</div>
         <div className="right">
           <button 
-            onClick={() => {
-              const id = `node-${Object.keys(nodeSystem.nodes).length}`;
-              nodeSystem.addNode(id, {
-                x: Math.random() * 300,
-                y: Math.random() * 200
-              });
-            }} 
+            onClick={() => setIsSelectorOpen(true)} 
             className="button primary"
           >
             Add Node
@@ -158,20 +154,24 @@ const Home = () => {
       </header>
 
       <div className="content">
-        <div 
-          className="canvas-container">
-          <canvas ref={canvasRef} className="webgpu-canvas" />
-          </div>
-
-        <div className="properties-panel">
-          <h2 className="properties-title">Properties</h2>
-          <div className="node-system-container" 
-              onMouseMove={nodeSystem.updateDraggingConnection}
-              onMouseUp={nodeSystem.clearDraggingConnection}>
-            <ConnectionLines 
+        <div className="canvas-container">
+          <canvas 
+            ref={canvasRef}
+            className="webgpu-canvas"
+          />
+        </div>
+        
+        <div className="node-system-container">
+          <div 
+            className="canvas"
+            onMouseMove={nodeSystem.updateDraggingConnection}
+            onMouseUp={nodeSystem.clearDraggingConnection}
+          >
+            <ConnectionLines
               nodes={nodeSystem.nodes}
               draggingConnection={nodeSystem.draggingConnection}
             />
+            
             {Object.entries(nodeSystem.nodes).map(([id, node]) => (
               <NodeBox
                 key={id}
@@ -184,18 +184,21 @@ const Home = () => {
               />
             ))}
           </div>
-          <div className="properties-list">
-            {Object.entries(nodeSystem.nodes).map(([id, node]) => (
-              <div key={id} className="property-item">
-                <h3 className="property-name">Node {id}</h3>
-                <div className="property-value">
-                  x: {Math.round(node.position.x)}, y: {Math.round(node.position.y)}
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
+
+      <ComponentSelector
+        isOpen={isSelectorOpen}
+        onClose={() => setIsSelectorOpen(false)}
+        onSelect={(componentType) => {
+          const id = `node-${Date.now()}`;
+          nodeSystem.addNode(id, {
+            x: Math.random() * 300,
+            y: Math.random() * 200,
+            componentType,
+          });
+        }}
+      />
     </div>
   );
 };

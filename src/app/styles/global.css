@@ -3,28 +3,33 @@
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
+  background-color: #1e1e1e;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ccc;
-  padding: 10px;
+  padding: 16px 24px;
+  background-color: #2d2d2d;
+  border-bottom: 1px solid #404040;
 }
 
 .left {
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
 }
 
 .right {
   display: flex;
-  gap: 20px;
+  gap: 12px;
 }
 
 .content {
   display: flex;
   flex: 1;
+  position: relative;
 }
 
 .canvas-container {
@@ -40,25 +45,24 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
 }
 
 .button {
   padding: 8px 16px;
   border-radius: 4px;
-  border: 1px solid #ccc;
-  background-color: white;
+  border: 1px solid #404040;
+  background-color: #3d3d3d;
+  color: white;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .button:hover {
-  background-color: #f0f0f0;
+  background-color: #4d4d4d;
 }
 
 .button.primary {
   background-color: #4caf93;
-  color: white;
   border: none;
 }
 
@@ -67,13 +71,9 @@
 }
 
 .node-system-container {
+  width: 70%;
   position: relative;
-  width: 100%;
-  min-height: 400px;
-  background-color: #333;
-  margin-bottom: 20px;
-  border-radius: 4px;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .connection-svg {
@@ -96,6 +96,18 @@
   cursor: move;
   pointer-events: auto;
   z-index: 10;
+  color: white;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.node-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
 }
 
 .node-connector {
@@ -106,6 +118,7 @@
   cursor: pointer;
   transition: all 0.2s;
   z-index: 11;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .node-connector.input {
@@ -127,7 +140,7 @@
   stroke: #4caf93;
   stroke-width: 2;
   fill: none;
-  transition: none;
+  pointer-events: stroke;
 }
 
 .connection-path:hover {
@@ -169,4 +182,81 @@
 .property-value {
   font-size: 14px;
   color: #666;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  min-width: 300px;
+}
+
+.modal-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.component-button {
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.component-button:hover {
+  transform: scale(1.05);
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.connection-svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.connection-path {
+  stroke: #4caf93;
+  stroke-width: 2;
+  fill: none;
+  pointer-events: stroke;
+}
+
+.connection-path:hover {
+  stroke: #2a8059;
+  stroke-width: 3;
+}
+
+.connection-path.dragging {
+  stroke: #666;
+  stroke-dasharray: 5,5;
 }
