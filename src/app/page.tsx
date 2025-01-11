@@ -181,6 +181,8 @@ const Home = () => {
                 onDrag={nodeSystem.updateNodePosition}
                 onStartConnection={nodeSystem.startConnection}
                 onEndConnection={nodeSystem.endConnection}
+                onValueChange={nodeSystem.updateNodeValue}
+                onStartResizing={nodeSystem.startResizing}
               />
             ))}
           </div>
@@ -190,12 +192,13 @@ const Home = () => {
       <ComponentSelector
         isOpen={isSelectorOpen}
         onClose={() => setIsSelectorOpen(false)}
-        onSelect={(componentType) => {
+        onSelect={(componentType, nodeType) => {
           const id = `node-${Date.now()}`;
           nodeSystem.addNode(id, {
             x: Math.random() * 300,
             y: Math.random() * 200,
             componentType,
+            nodeType,
           });
         }}
       />
