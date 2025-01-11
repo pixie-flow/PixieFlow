@@ -88,6 +88,38 @@ export const getDefaultConfig = (category: string, type: string): NodeConfig => 
       }
       break;
 
+    case 'composite':
+      switch (type) {
+        case 'blend':
+          return {
+            category: 'composite',
+            type: 'blend',
+            label: 'ブレンド',
+            inputs: { 
+              mode: 'normal',
+              opacity: 1.0,
+              layer1: null,
+              layer2: null
+            },
+            outputs: { result: null }
+          };
+        case 'mask':
+          return {
+            category: 'composite',
+            type: 'mask',
+            label: 'マスク',
+            inputs: {
+              source: null,
+              mask: null,
+              intensity: 1.0
+            },
+            outputs: { result: null }
+          };
+        default:
+          break;
+      }
+      break;
+
     case 'texture':
       switch (type) {
         case 'color':

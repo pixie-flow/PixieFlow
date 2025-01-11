@@ -20,6 +20,14 @@ const components: {
   subItems: SubMenuItem[];
 }[] = [
   {
+    type: 'function',
+    label: '関数',
+    color: '#E91E63',  // ピンク系: 数学的な処理を表現
+    subItems: [
+      { type: 'arithmetic', label: '四則演算' }
+    ]
+  },
+  {
     type: 'geometry',
     label: 'ジオメトリ',
     color: '#2196F3',
@@ -44,7 +52,6 @@ const components: {
     label: '合成処理',
     color: '#FF9800',
     subItems: [
-      { type: 'arithmetic', label: '四則演算' },
       { type: 'blend', label: 'ブレンド' },
       { type: 'mask', label: 'マスク' }
     ]

@@ -5,7 +5,7 @@ export type NodeType =
   | 'color' | 'image' | 'gradient'          // texture
   | 'blend' | 'mask'                        // composite
   | 'drag' | 'click' | 'hover'              // interaction
-  | 'arithmetic';                           // function
+  | 'arithmetic' | 'input' | 'trigonometric'; // function
 
 export interface NodePort {
   id: string;

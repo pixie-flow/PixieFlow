@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Node, DraggingConnection } from '../types/node';
-import { createPath } from '../utils/path';
 
 interface ConnectionLinesProps {
   nodes: Record<string, Node>;
@@ -34,7 +33,7 @@ export const ConnectionLines: React.FC<ConnectionLinesProps> = ({ nodes, draggin
               <path
                 key={`${sourceNode.output.id}-${targetPortId}-${idx}`}
                 d={createPath(
-                  sourceNode.position.x + 160,
+                  sourceNode.position.x + 200,
                   sourceNode.position.y + sourceNode.output.y,
                   targetNode.position.x,
                   targetNode.position.y + targetNode.input.y
@@ -52,7 +51,7 @@ export const ConnectionLines: React.FC<ConnectionLinesProps> = ({ nodes, draggin
           className="connection-path dragging"
           d={createPath(
             draggingConnection.sourceType === 'output'
-              ? nodes[draggingConnection.sourceId].position.x + 160
+              ? nodes[draggingConnection.sourceId].position.x + 200
               : draggingConnection.x,
             draggingConnection.sourceType === 'output'
               ? nodes[draggingConnection.sourceId].position.y + nodes[draggingConnection.sourceId].output.y

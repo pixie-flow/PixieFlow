@@ -39,12 +39,12 @@ export const useNodeSystem = () => {
           componentNumber: currentCount + 1,
           input: {
             id: `${id}-in`,
-            y: 30,
+            y: 20,
             connections: []
           },
           output: {
             id: `${id}-out`,
-            y: 30,
+            y: 20,
             connections: []
           },
           values: { ...config.inputs }

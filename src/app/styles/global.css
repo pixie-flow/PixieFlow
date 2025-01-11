@@ -172,11 +172,13 @@
 
 .node-connector.input {
   left: -6px;
+  top: 20px;
   background-color: #3b82f6;
 }
 
 .node-connector.output {
   right: -6px;
+  top: 20px;
   background-color: #10b981;
 }
 
