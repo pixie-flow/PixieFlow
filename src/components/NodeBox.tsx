@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Draggable from 'react-draggable';
 import type { Node, ComponentType, NodeType } from '../types/node';
 import { getDefaultConfig } from '../utils/nodeConfig';
@@ -10,9 +10,18 @@ interface NodeBoxProps {
   onDrag: (id: string, position: { x: number; y: number }) => void;
   onStartConnection: (nodeId: string, portId: string, portType: 'input' | 'output', event: React.MouseEvent) => void;
   onEndConnection: (nodeId: string, portId: string, portType: 'input' | 'output', event: React.MouseEvent) => void;
+  onValueChange: (nodeId: string, key: string, value: any) => void;
 }
 
-export const NodeBox: React.FC<NodeBoxProps> = ({ id, node, position, onDrag, onStartConnection, onEndConnection })  => {
+export const NodeBox: React.FC<NodeBoxProps> = ({ 
+  id, 
+  node, 
+  position, 
+  onDrag, 
+  onStartConnection, 
+  onEndConnection,
+  onValueChange 
+}) => {
   const getComponentColor = (type: ComponentType): string => {
     switch (type) {
       case 'geometry': return '#2196F3';
@@ -33,6 +42,63 @@ export const NodeBox: React.FC<NodeBoxProps> = ({ id, node, position, onDrag, on
     }
   };
 
+  const config = useMemo(() => getDefaultConfig(node.componentType, node.nodeType), [node.componentType, node.nodeType]);
+
+  const renderInputField = (key: string, value: any) => {
+    if (typeof value === 'number') {
+      return (
+        <div key={key} className="node-input-field">
+          <label>{key}:</label>
+          <input
+            type="number"
+            value={node.values[key]}
+            onChange={(e) => onValueChange(id, key, parseFloat(e.target.value))}
+          />
+        </div>
+      );
+    }
+    if (typeof value === 'string') {
+      return (
+        <div key={key} className="node-input-field">
+          <label>{key}:</label>
+          <input
+            type="text"
+            value={node.values[key]}
+            onChange={(e) => onValueChange(id, key, e.target.value)}
+          />
+        </div>
+      );
+    }
+    if (value && typeof value === 'object' && 'x' in value) {
+      return (
+        <div key={key} className="node-input-field vector">
+          <label>{key}:</label>
+          <div className="vector-inputs">
+            <input
+              type="number"
+              value={node.values[key].x}
+              onChange={(e) => onValueChange(id, key, { ...node.values[key], x: parseFloat(e.target.value) })}
+              placeholder="x"
+            />
+            <input
+              type="number"
+              value={node.values[key].y}
+              onChange={(e) => onValueChange(id, key, { ...node.values[key], y: parseFloat(e.target.value) })}
+              placeholder="y"
+            />
+            <input
+              type="number"
+              value={node.values[key].z}
+              onChange={(e) => onValueChange(id, key, { ...node.values[key], z: parseFloat(e.target.value) })}
+              placeholder="z"
+            />
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Draggable
       position={position}
@@ -45,7 +111,10 @@ export const NodeBox: React.FC<NodeBoxProps> = ({ id, node, position, onDrag, on
         style={{ backgroundColor: getComponentColor(node.componentType) }}
       >
         <div className="node-title">
-          {getDefaultConfig(node.componentType, node.nodeType).label}
+          {config.label}
+        </div>
+        <div className="node-content">
+          {Object.entries(config.inputs).map(([key, value]) => renderInputField(key, value))}
         </div>
         
         <div 

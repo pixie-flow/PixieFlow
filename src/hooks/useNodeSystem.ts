@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Node, DraggingConnection, ComponentType, NodeType } from '../types/node';
+import { getDefaultConfig } from '../utils/nodeConfig';
 
 export const useNodeSystem = () => {
   const [nodes, setNodes] = useState<Record<string, Node>>({});
@@ -14,12 +15,14 @@ export const useNodeSystem = () => {
     geometry: 0,
     texture: 0,
     composite: 0,
-    interaction: 0
+    interaction: 0,
+    function: 0
   });
 
   const addNode = (id: string, options: { x: number; y: number; componentType: ComponentType; nodeType: NodeType }) => {
     setNodes(prev => {
       const currentCount = componentCounters[options.componentType];
+      const config = getDefaultConfig(options.componentType, options.nodeType);
       
       setComponentCounters(prevCounters => ({
         ...prevCounters,
@@ -43,10 +46,24 @@ export const useNodeSystem = () => {
             id: `${id}-out`,
             y: 30,
             connections: []
-          }
+          },
+          values: { ...config.inputs }
         }
       };
     });
+  };
+
+  const updateNodeValue = (nodeId: string, key: string, value: any) => {
+    setNodes(prev => ({
+      ...prev,
+      [nodeId]: {
+        ...prev[nodeId],
+        values: {
+          ...prev[nodeId].values,
+          [key]: value
+        }
+      }
+    }));
   };
 
   const updateNodePosition = (id: string, position: { x: number; y: number }) => {
@@ -126,6 +143,7 @@ export const useNodeSystem = () => {
     draggingConnection,
     addNode,
     updateNodePosition,
+    updateNodeValue,
     startConnection,
     endConnection,
     removeConnection,

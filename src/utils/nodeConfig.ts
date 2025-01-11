@@ -71,6 +71,18 @@ export const getDefaultConfig = (category: string, type: string): NodeConfig => 
             inputs: { radius: 1, position: { x: 0, y: 0, z: 0 } },
             outputs: { geometry: null }
           };
+        case 'cylinder':
+          return {
+            category: 'geometry',
+            type: 'cylinder',
+            label: '円柱',
+            inputs: { 
+              radius: 1, 
+              height: 1,
+              position: { x: 0, y: 0, z: 0 }
+            },
+            outputs: { geometry: null }
+          };
         default:
           break;
       }
@@ -95,6 +107,18 @@ export const getDefaultConfig = (category: string, type: string): NodeConfig => 
             inputs: { url: '' },
             outputs: { texture: null }
           };
+        case 'gradient':
+          return {
+            category: 'texture',
+            type: 'gradient',
+            label: 'グラデーション',
+            inputs: { 
+              startColor: '#000000',
+              endColor: '#ffffff',
+              direction: 'horizontal'
+            },
+            outputs: { texture: null }
+          };
         default:
           break;
       }
@@ -117,6 +141,14 @@ export const getDefaultConfig = (category: string, type: string): NodeConfig => 
             label: 'クリック',
             inputs: { target: null },
             outputs: { clicked: false }
+          };
+        case 'hover':
+          return {
+            category: 'interaction',
+            type: 'hover',
+            label: 'ホバー',
+            inputs: { target: null },
+            outputs: { hovered: false }
           };
         default:
           break;

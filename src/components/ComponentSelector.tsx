@@ -80,30 +80,31 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
               key={type}
               className={styles['component-item']}
               onMouseEnter={() => setHoveredComponent(type)}
-              onMouseLeave={() => setHoveredComponent(null)}
             >
-              <button
-                className={styles['component-button']}
-                style={{ backgroundColor: color }}
-              >
-                {label}
-              </button>
-              {hoveredComponent === type && (
-                <div className={styles['sub-menu']}>
-                  {subItems.map(subItem => (
-                    <button
-                      key={subItem.type}
-                      className={styles['sub-menu-item']}
-                      onClick={() => {
-                        onSelect(type, subItem.type);
-                        onClose();
-                      }}
-                    >
-                      {subItem.label}
-                    </button>
-                  ))}
-                </div>
-              )}
+              <div className={styles['component-content']}>
+                <button
+                  className={styles['component-button']}
+                  style={{ backgroundColor: color }}
+                >
+                  {label}
+                </button>
+                {hoveredComponent === type && (
+                  <div className={styles['sub-menu']}>
+                    {subItems.map(subItem => (
+                      <button
+                        key={subItem.type}
+                        className={styles['sub-menu-item']}
+                        onClick={() => {
+                          onSelect(type, subItem.type);
+                          onClose();
+                        }}
+                      >
+                        {subItem.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>

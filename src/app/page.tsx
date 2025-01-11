@@ -181,6 +181,7 @@ const Home = () => {
                 onDrag={nodeSystem.updateNodePosition}
                 onStartConnection={nodeSystem.startConnection}
                 onEndConnection={nodeSystem.endConnection}
+                onValueChange={nodeSystem.updateNodeValue}
               />
             ))}
           </div>
