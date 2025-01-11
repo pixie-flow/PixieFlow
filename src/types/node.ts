@@ -1,5 +1,11 @@
 export type ComponentType = 'geometry' | 'texture' | 'composite' | 'interaction';
 
+export type NodeType = 
+  | 'cube' | 'sphere' | 'cylinder'           // geometry
+  | 'color' | 'image' | 'gradient'          // texture
+  | 'arithmetic' | 'blend' | 'mask'         // composite
+  | 'drag' | 'click' | 'hover';             // interaction
+
 export interface NodePort {
   id: string;
   y: number;
@@ -12,6 +18,7 @@ export interface Node {
   input: NodePort;
   output: NodePort;
   componentType: ComponentType;
+  nodeType: NodeType;
   componentNumber: number;
 }
 

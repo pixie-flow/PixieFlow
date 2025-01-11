@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Node, DraggingConnection, ComponentType } from '../types/node';
+import type { Node, DraggingConnection, ComponentType, NodeType } from '../types/node';
 
 export const useNodeSystem = () => {
   const [nodes, setNodes] = useState<Record<string, Node>>({});
@@ -17,7 +17,7 @@ export const useNodeSystem = () => {
     interaction: 0
   });
 
-  const addNode = (id: string, options: { x: number; y: number; componentType: ComponentType }) => {
+  const addNode = (id: string, options: { x: number; y: number; componentType: ComponentType; nodeType: NodeType }) => {
     setNodes(prev => {
       const currentCount = componentCounters[options.componentType];
       
@@ -32,6 +32,7 @@ export const useNodeSystem = () => {
           id,
           position: { x: options.x, y: options.y },
           componentType: options.componentType,
+          nodeType: options.nodeType,
           componentNumber: currentCount + 1,
           input: {
             id: `${id}-in`,
@@ -128,7 +129,7 @@ export const useNodeSystem = () => {
     startConnection,
     endConnection,
     removeConnection,
-    updateDraggingConnection: (event) => {
+    updateDraggingConnection: (event: React.MouseEvent) => {
       if (draggingConnection) {
         setDraggingConnection(prev => ({
           ...prev!,
