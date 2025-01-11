@@ -11,6 +11,7 @@ interface NodeBoxProps {
   onStartConnection: (nodeId: string, portId: string, portType: 'input' | 'output', event: React.MouseEvent) => void;
   onEndConnection: (nodeId: string, portId: string, portType: 'input' | 'output', event: React.MouseEvent) => void;
   onValueChange: (nodeId: string, key: string, value: any) => void;
+  onStartResizing: (nodeId: string, event: React.MouseEvent) => void;
 }
 
 export const NodeBox: React.FC<NodeBoxProps> = ({ 
@@ -20,7 +21,8 @@ export const NodeBox: React.FC<NodeBoxProps> = ({
   onDrag, 
   onStartConnection, 
   onEndConnection,
-  onValueChange 
+  onValueChange,
+  onStartResizing
 }) => {
   const getComponentColor = (type: ComponentType): string => {
     switch (type) {
@@ -107,14 +109,63 @@ export const NodeBox: React.FC<NodeBoxProps> = ({
       cancel=".node-connector"
     >
       <div 
-        className="node-box" 
-        style={{ backgroundColor: getComponentColor(node.componentType) }}
+        className={`node-box ${node.isContainer ? 'node-container' : ''}`}
+        style={{ 
+          backgroundColor: getComponentColor(node.componentType),
+          width: node.isContainer ? node.values.width : 200,
+          height: node.isContainer ? node.values.height : 'auto',
+          border: node.isContainer ? '2px dashed rgba(255, 255, 255, 0.3)' : undefined,
+          padding: node.isContainer ? '20px' : '12px'
+        }}
       >
         <div className="node-title">
           {config.label}
+          {node.isContainer && (
+            <div className="container-controls">
+              <div className="container-info">
+                <button 
+                  className="resize-handle"
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    onStartResizing(id, e);
+                  }}
+                >
+                  ↘
+                </button>
+                <div className="node-count" title="内部のノード数">
+                  {node.containedNodes?.length || 0}
+                </div>
+                {node.containedNodes?.length ? (
+                  <div className="contained-nodes">
+                    {node.containedNodes.map(nodeId => (
+                      <div key={nodeId} className="contained-node-indicator" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-container-message">
+                    ノードをドラッグして追加
+                  </div>
+                )}
+              </div>
+              <span className="node-count">
+                {node.containedNodes?.length || 0} nodes
+              </span>
+            </div>
+          )}
         </div>
         <div className="node-content">
-          {Object.entries(config.inputs).map(([key, value]) => renderInputField(key, value))}
+          {node.nodeType === 'input' ? (
+            <div className="node-input-field">
+              <input
+                type="number"
+                value={node.values.value || 0}
+                onChange={(e) => onValueChange(id, 'value', parseFloat(e.target.value))}
+                className="number-input"
+              />
+            </div>
+          ) : (
+            Object.entries(config.inputs).map(([key, value]) => renderInputField(key, value))
+          )}
         </div>
         
         <div 

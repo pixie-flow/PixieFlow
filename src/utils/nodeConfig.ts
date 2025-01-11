@@ -1,12 +1,7 @@
-export type NodeCategory = 'function' | 'geometry' | 'texture' | 'interaction';
-export type NodeType = 
-  | 'input' | 'arithmetic' | 'trigonometric'  // function
-  | 'cube' | 'sphere' | 'cylinder'           // geometry
-  | 'color' | 'image' | 'gradient'          // texture
-  | 'drag' | 'click' | 'hover';             // interaction
+import type { ComponentType, NodeType } from '../types/node';
 
 interface NodeConfig {
-  category: NodeCategory;
+  category: ComponentType;
   type: NodeType;
   label: string;
   inputs: { [key: string]: any };
@@ -28,25 +23,107 @@ export const getDefaultConfig = (category: string, type: string): NodeConfig => 
             outputs: { value: 0 },
             defaultValue: 0
           };
-        case 'arithmetic':
+        // 四則演算（入力フィールドなし、純粋な演算子として機能）
+        case 'add':
           return {
             category: 'function',
-            type: 'arithmetic',
-            label: '四則演算',
-            inputs: { input1: 0, input2: 0 },
-            outputs: { result: 0 },
-            operations: ['add', 'subtract', 'multiply', 'divide'],
-            defaultValue: 'add'
+            type: 'add',
+            label: '+',
+            inputs: {},
+            outputs: { result: 0 }
           };
-        case 'trigonometric':
+        case 'subtract':
           return {
             category: 'function',
-            type: 'trigonometric',
-            label: '三角関数',
-            inputs: { input: 0 },
-            outputs: { result: 0 },
-            operations: ['sin', 'cos', 'tan'],
-            defaultValue: 'sin'
+            type: 'subtract',
+            label: '-',
+            inputs: {},
+            outputs: { result: 0 }
+          };
+        case 'multiply':
+          return {
+            category: 'function',
+            type: 'multiply',
+            label: '×',
+            inputs: {},
+            outputs: { result: 0 }
+          };
+        case 'divide':
+          return {
+            category: 'function',
+            type: 'divide',
+            label: '÷',
+            inputs: {},
+            outputs: { result: 0 }
+          };
+        // 括弧（計算優先順位）
+        case 'parentheses':
+          return {
+            category: 'function',
+            type: 'parentheses',
+            label: '( )',
+            inputs: {},
+            outputs: { result: 0 }
+          };
+        // 累乗
+        case 'power':
+          return {
+            category: 'function',
+            type: 'power',
+            label: '累乗',
+            inputs: { base: 0, exponent: 2 },
+            outputs: { result: 0 }
+          };
+        // 三角関数
+        case 'sin':
+          return {
+            category: 'function',
+            type: 'sin',
+            label: 'サイン',
+            inputs: { angle: 0 },
+            outputs: { result: 0 }
+          };
+        case 'cos':
+          return {
+            category: 'function',
+            type: 'cos',
+            label: 'コサイン',
+            inputs: { angle: 0 },
+            outputs: { result: 0 }
+          };
+        case 'tan':
+          return {
+            category: 'function',
+            type: 'tan',
+            label: 'タンジェント',
+            inputs: { angle: 0 },
+            outputs: { result: 0 }
+          };
+        // 微積分
+        case 'derivative':
+          return {
+            category: 'function',
+            type: 'derivative',
+            label: '微分',
+            inputs: { 
+              function: 0,
+              point: 0,
+              delta: 0.0001 // 数値微分の刻み幅
+            },
+            outputs: { result: 0 }
+          };
+        case 'integral':
+          return {
+            category: 'function',
+            type: 'integral',
+            label: '積分',
+            inputs: { 
+              function: 0,
+              lowerBound: 0,
+              upperBound: 1,
+              steps: 1000 // 数値積分の分割数
+            },
+            outputs: { result: 0 }
           };
         default:
           break;

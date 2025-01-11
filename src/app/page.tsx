@@ -182,6 +182,7 @@ const Home = () => {
                 onStartConnection={nodeSystem.startConnection}
                 onEndConnection={nodeSystem.endConnection}
                 onValueChange={nodeSystem.updateNodeValue}
+                onStartResizing={nodeSystem.startResizing}
               />
             ))}
           </div>

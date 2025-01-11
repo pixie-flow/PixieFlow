@@ -21,10 +21,24 @@ const components: {
 }[] = [
   {
     type: 'function',
-    label: '関数',
+    label: '数学関数',
     color: '#E91E63',  // ピンク系: 数学的な処理を表現
     subItems: [
-      { type: 'arithmetic', label: '四則演算' }
+      // 基本要素
+      { type: 'input', label: '数値入力' },
+      { type: 'parentheses', label: '( )' },
+      // 演算子
+      { type: 'add', label: '+' },
+      { type: 'subtract', label: '-' },
+      { type: 'multiply', label: '×' },
+      { type: 'divide', label: '÷' },
+      // 高度な関数
+      { type: 'power', label: '累乗' },
+      { type: 'sin', label: 'sin' },
+      { type: 'cos', label: 'cos' },
+      { type: 'tan', label: 'tan' },
+      { type: 'derivative', label: '微分' },
+      { type: 'integral', label: '積分' }
     ]
   },
   {
