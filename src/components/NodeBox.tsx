@@ -1,6 +1,7 @@
 import React from 'react';
 import Draggable from 'react-draggable';
-import type { Node, ComponentType } from '../types/node';
+import type { Node, ComponentType, NodeType } from '../types/node';
+import { getDefaultConfig } from '../utils/nodeConfig';
 
 interface NodeBoxProps {
   id: string;
@@ -44,7 +45,7 @@ export const NodeBox: React.FC<NodeBoxProps> = ({ id, node, position, onDrag, on
         style={{ backgroundColor: getComponentColor(node.componentType) }}
       >
         <div className="node-title">
-          {`${getComponentLabel(node.componentType)} ${node.componentNumber}`}
+          {getDefaultConfig(node.componentType, node.nodeType).label}
         </div>
         
         <div 
